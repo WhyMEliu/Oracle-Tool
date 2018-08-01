@@ -1,0 +1,12 @@
+SELECT v.SQL_TEXT,m.* FROM (select distinct snap_id,
+                sql_id,
+                EXECUTIONS_DELTA,
+                trunc(max(ELAPSED_TIME_DELTA)
+                      OVER(PARTITION BY snap_id, sql_id) / 1000000,
+                      0) max_elapsed,
+                trunc((max(ELAPSED_TIME_DELTA)
+                       OVER(PARTITION BY snap_id, sql_id)) /
+                      (SUM(ELAPSED_TIME_DELTA) OVER(PARTITION BY snap_id)),
+                      2) * 100 per_total
+  from dba_hist_sqlstat t WHERE T.snap_id IN (SELECT MAX(snap_id) FROM dba_hist_sqlstat) ) M,v$sql v 
+  where m.sql_id=v.sql_id and m.max_elapsed>=2000;
