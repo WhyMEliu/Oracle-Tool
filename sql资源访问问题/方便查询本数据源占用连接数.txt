@@ -1,0 +1,4 @@
+<!--本数据源连接数据库连接的别名，方便数据库中查看本数据源占用连接个数；由于受限于数据库字段长度，所以别名长度不能超过 30 个字符-->
+        <property name="connectionProperties">
+           <value>v$session.terminal=gnnt.issue_core-trade;</value>
+        </property>  
