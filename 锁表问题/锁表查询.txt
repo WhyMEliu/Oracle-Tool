@@ -16,3 +16,10 @@ decode(locked_mode,0,'None',1,'Null',2,'Row share',
 object_name ,xidusn,xidslot,xidsqn
 from v$locked_object,all_objects
 where v$locked_object.object_id=all_objects.object_id;
+
+//解锁
+select object_name,machine,s.sid,s.serial#
+from v$locked_object l,dba_objects o ,v$session s
+where l.object_id　=　o.object_id and l.session_id=s.sid;
+
+alter system kill session 'sid, serial#';
