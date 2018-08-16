@@ -9,3 +9,10 @@ FROM V$LOCKED_OBJECT l,V$SESSION S WHERE l.SESSION_ID=S.SID and s.USERNAME='TRAD
 
 
 select * from V$LOCKED_OBJECT;
+
+select rpad(oracle_username,10) o_name,session_id sid,
+decode(locked_mode,0,'None',1,'Null',2,'Row share',
+3,'Row Exclusive',4,'Share',5,'Share Row Exclusive',6,'Exclusive') lock_type,
+object_name ,xidusn,xidslot,xidsqn
+from v$locked_object,all_objects
+where v$locked_object.object_id=all_objects.object_id;
