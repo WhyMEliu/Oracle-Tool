@@ -23,3 +23,12 @@ from v$locked_object l,dba_objects o ,v$session s
 where l.object_id　=　o.object_id and l.session_id=s.sid;
 
 alter system kill session 'sid, serial#';
+
+lmod
+0	none 
+1	NULL	空	Select
+2	SS(Row-S)	行级共享锁，其他对象只能查询这些数据行	Select forupdate、Lock for update、Lock row share
+3	SX(Row-X)	行级排它锁，在提交前不允许做DML操作	Insert、Update、Delete、Lock row share
+4	S(Share)	共享锁	Createindex、Lock share
+5	SSX(S/Row-X)	共享行级排它锁	Lock share row exclusive
+6	X(Exclusive)	排它锁	Alter table、Drop able、Drop index、Truncate 
