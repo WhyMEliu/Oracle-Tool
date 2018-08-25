@@ -1,0 +1,32 @@
+-- 先建库
+create database test;
+--在建用户进行绑定
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON test.* TO 'test2'@'localhost' IDENTIFIED BY 'password';
+
+建库，导库，备库
+
+进入putty输入su - oracle进入sql命令模式
+--数据备份
+expdp 账号/密码 dumpfile=包名.dmp directory=dump;
+
+sqlplus "/as sysdba"
+
+--删除数据库并重建
+SQL>drop user 账号 cascade;
+--给予相应的权限
+SQL>create user 账号 identified by 密码 default tablespace users temporary tablespace temp;
+
+SQL>grant imp_full_database,create materialized view, debug connect session to 账号;
+
+SQL>grant connect,resource,create synonym,create view to 账号;
+
+SQL>grant select any table to 账号;
+
+SQL>grant create public database link to 账号;
+
+
+--导入库数据
+impdp 账号/密码 dumpfile=trade_hnzw_new_kongku_20180606_1.dmp directory=dump remap_schema=来源账号:去向账号;
+
+
+
