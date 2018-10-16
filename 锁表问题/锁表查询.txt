@@ -1,13 +1,14 @@
+//root用户下根据用户名进行锁表查询（V$LOCKED_OBJECT，V$SESSION，v$sql）
 SELECT s.username,l.OBJECT_ID,l.SESSION_ID,s.SERIAL#,s.SCHEMANAME,s.MACHINE,s.TERMINAL,f.SQL_TEXT,
 l.ORACLE_USERNAME,l.OS_USER_NAME,l.PROCESS 
 FROM V$LOCKED_OBJECT l,V$SESSION S,v$sql f WHERE l.SESSION_ID=S.SID and s.SQL_ID=f.SQL_ID and s.USERNAME='TRADE_JWYG_PE';  
 
-
+//root用户下根据用户名进行锁表查询（V$LOCKED_OBJECT，V$SESSION）
 SELECT s.username,l.OBJECT_ID,l.SESSION_ID,s.SERIAL#,s.SCHEMANAME,s.MACHINE,s.TERMINAL,s.SQL_ID,
 l.ORACLE_USERNAME,l.OS_USER_NAME,l.PROCESS 
 FROM V$LOCKED_OBJECT l,V$SESSION S WHERE l.SESSION_ID=S.SID and s.USERNAME='TRADE_JWYG_PE';
 
-
+//锁表数据查询
 select * from V$LOCKED_OBJECT;
 
 select rpad(oracle_username,10) o_name,session_id sid,
@@ -17,13 +18,14 @@ object_name ,xidusn,xidslot,xidsqn
 from v$locked_object,all_objects
 where v$locked_object.object_id=all_objects.object_id;
 
-//解锁
+//解锁查询语句
 select object_name,machine,s.sid,s.serial#
 from v$locked_object l,dba_objects o ,v$session s
 where l.object_id　=　o.object_id and l.session_id=s.sid;
-
+//杀掉该锁表进程
 alter system kill session 'sid, serial#';
 
+//表中lmod锁的意义
 lmod
 0	none 
 1	NULL	空	Select
