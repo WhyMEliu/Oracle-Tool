@@ -32,3 +32,10 @@ impdp 账号/密码 dumpfile=文件.dmp directory=dump remap_schema=来源账号
 --表级别的导入，导出，12c需要增加ip
 expdp 账号/密码 dumpfile=文件.dmp directory=dump Tables=账户.表名;
 impdp 账号/密码@ip:端口/实例名 dumpfile=文件.dmp directory=dump 
+
+--备库只要表结构及存储等 不要数据  
+使用 Content参数。该参数有三个属性
+1) ALL : 导出/导入对象定义和数据，该参数的默认值就是ALL
+2) DATA_ONLY : 只导出/导入数据。
+3) METADATA_ONLY : 只导出/导入对象定义。
+expdp trade_jwyg_new/password dumpfile=trade_jwyg_new11021.dmp directory=dump Content=METADATA_ONLY;
