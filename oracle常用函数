@@ -1,0 +1,180 @@
+1.UPPER
+返回字符串,并将所有的字符大写
+SQL> select upper('AaBbCcDd') upper from dual;
+--------
+AABBCCDD
+
+2.RPAD和LPAD(粘贴字符)
+RPAD  在列的右边粘贴字符
+LPAD  在列的左边粘贴字符
+SQL> select lpad(rpad('gao',10,'*'),17,'*')from dual;
+*******gao*******
+不够字符则用*来填满
+
+3.TRIM('s' from 'string');
+如果不指定,默认为空格符
+4.LTRIM和RTRIM
+LTRIM  删除左边出现的字符串
+RTRIM  删除右边出现的字符串
+SQL> select ltrim(rtrim('   gao qian jing   ',' '),' ') from dual;
+-------------
+gao qian jing
+
+5.SUBSTR(string,start,count)
+取子字符串,从start开始,取count个
+SQL> select substr('13088888888',3,8) from dual;
+--------
+08888888
+
+6.REPLACE('string','s1','s2')
+string   希望被替换的字符或变量 
+s1       被替换的字符串
+s2       要替换的字符串
+SQL> select replace('this','is','at') from dual;
+----------
+that
+
+7.ABS
+返回指定值的绝对值
+SQL> select abs(100),abs(-100) from dual;
+--------- ---------
+      100       100
+
+8.CEIL
+返回大于或等于给出数字的最小整数
+SQL> select ceil(3.1415927) from dual;
+---------------
+              4
+9.FLOOR
+对给定的数字取整数
+SQL> select floor(2345.67) from dual;
+--------------
+          2345
+
+10.ROUND和TRUNC
+按照指定的精度进行舍入
+SQL> select round(55.5),round(-55.4) from dual;
+----------- ------------ 
+         56          -55    
+
+10.TRUNC
+按照指定的精度进行截取
+SQL> select trunc(55.5),trunc(-55.5) from dual;
+
+ ----------- ------------
+        55          -55
+可以截取日期
+SQL> select trunc(sysdate) from dual
+-------------
+2015-12-29
+
+11.ADD_MONTHS
+增加或减去月份
+SQL> select to_char(add_months(to_date('199912','yyyymm'),2),'yyyymm') from dual;
+------
+200002
+SQL> select to_char(add_months(to_date('199912','yyyymm'),-2),'yyyymm') from dual;
+------
+199910
+
+12.NEXT_DAY(date,'day')
+给出日期date和星期x之后计算下一个星期的日期
+SQL> select next_day('18-5月-2001','星期五') next_day from dual;
+SQL> select next_day('18-5月-2001',6) next_day from dual;
+----------
+25-5月 -01
+
+13.TO_CHAR(date,'format')
+SQL> select to_char(sysdate,'yyyy/mm/dd hh24:mi:ss') from dual;
+-------------------
+2004/05/09 21:14:41
+
+14.TO_DATE(string,'format')
+将字符串转化为ORACLE中的一个日期
+SQL>select to_date('2015-12-29','yyyy-MM-dd') from dual;
+
+
+15.MAX(DISTINCT|ALL)
+求最大值,ALL表示对所有的值求最大值,DISTINCT表示对不同的值求最大值,相同的只取一次
+SQL> select max(distinct sal) from scott.emp;
+----------------
+            5000
+
+16.MIN(DISTINCT|ALL)
+求最小值,ALL表示对所有的值求最小值,DISTINCT表示对不同的值求最小值,相同的只取一次
+SQL> select min(all sal) from gao.table3;
+-----------
+    1111.11
+17.GROUP BY
+主要用来对一组数进行统计
+18.HAVING
+对分组统计再加限制条件
+SQL> select deptno,count(*),sum(sal) from scott.emp group by deptno having count(*)>=5;
+
+SQL> select deptno,count(*),sum(sal) from scott.emp having count(*)>=5 group by deptno ;
+
+
+19.ORDER BY
+用于对查询到的结果进行排序输出
+
+20.length
+计算字符串长度
+ select length('abcdef') from dual
+
+
+21. decode[实现if ..then 逻辑]   注:第一个是表达式,最后一个是不满足任何一个条件的值
+   select deptno,decode(deptno,10,'1',20,'2',30,'3','其他') from dept;
+
+22. case[实现switch ..case 逻辑]
+
+    SELECT CASE X-FIELD 
+         WHEN X-FIELD < 40 THEN 'X-FIELD 小于 40'
+         WHEN X-FIELD < 50 THEN 'X-FIELD 小于 50'
+         WHEN X-FIELD < 60 THEN 'X-FIELD 小于 60'
+         ELSE 'UNBEKNOWN'
+        END
+   FROM DUAL 
+   
+注:CASE语句在处理类似问题就显得非常灵活。当只是需要匹配少量数值时，用Decode更为简洁
+
+
+23.to_number() 转换为数字类型 
+   select to_number(to_char(sysdate,'hh12')) from dual; //以数字显示的小时数
+
+24.nvl(ex1,ex2): 　
+   ex1值为空则返回ex2,否则返回该值本身ex1（常用） 
+   select comm,nvl(comm,0) from emp;
+
+25.树形的数据
+查所有的子节点：select * from (select brokerid,decode(parentid, brokerid, '', parentid) parentid from br_brokerRelation) t connect by  prior brokerid =  parentid  start with brokerid ='Y3'
+查所有的父节点：select * from (select brokerid,decode(parentid, brokerid, '', parentid) parentid from br_brokerRelation) t connect by   brokerid= prior  parentid  start with brokerid ='Y333'
+
+保持树形的数据之后排序使用order siblings by parentid
+
+26.分析函数lag over
+select firmid,lag(firmid,1)  over(order by firmid) from m_firm  where  length(firmid)=10 and regexp_like(firmid,'^[0-9]+$')
+oracle支持正则表达式
+注意：当表中只有一条或者没有数据时查不出来
+
+856202571639.04
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
